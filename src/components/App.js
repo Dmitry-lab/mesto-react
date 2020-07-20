@@ -1,34 +1,14 @@
 import React from 'react';
-import logo from '../images/logo.svg';
+import Header from './Header';
+import Footer from './Footer';
+import Main from './Main'
 
 function App() {
   return (
     <div className="page">
-      <header className="header">
-        <img className="header__logo" src={logo} alt="логотип сервиса Mesto" />
-      </header>
-      <main>
-        <section className="profile">
-          <div className="profile__content">
-            <div className="profile__avatar-block">
-              <img className="profile__avatar" src="images/avatar.jpg" alt="аватар пользователя" />
-              <div className="profile__shadow-rect"></div>
-              <img className="profile__edit-icon" src="images/edit-icon.svg" alt="иконка редактирования аватара" />
-            </div>
-            <div className="profile__info">
-              <h1 className="profile__name">Жак-Ив Кусто</h1>
-              <button className="default-button profile__edit-button" type="button"></button>
-              <p className="profile__description">Исследователь океана</p>
-            </div>
-          </div>
-          <button className="default-button profile__add-button" type="button"></button>
-        </section>
-        <section className="gallery">
-        </section>
-      </main>
-      <footer className="footer">
-        <p className="footer__copyright">&copy; 2020 Mesto Russia</p>
-      </footer>
+      <Header />
+      <Main />
+      <Footer />
       <div className="popup" id="popup-profile">
         <form className="popup__container" novalidate>
           <h2 className="popup__title">Редактировать профиль</h2>
