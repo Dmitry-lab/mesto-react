@@ -1,10 +1,8 @@
 import React from 'react';
 
 function PoupWithForm(props) {
-  const fullClassName = props.isOpen ? 'popup popup_opened' : 'popup';
-
   return (
-    <div className={fullClassName} id={`popup-${props.name}`} onClick={props.onClose}>
+    <div className={props.isOpen ? 'popup popup_opened' : 'popup'} id={`popup-${props.name}`} onClick={props.onClose}>
       <form className="popup__container" noValidate>
         <h2 className="popup__title">{props.title}</h2>
         {props.children}
