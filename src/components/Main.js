@@ -6,7 +6,7 @@ import Card from './Card';
 function Main(props) {
   const [userName, setUserName] = React.useState('Жак-Ив Кусто');
   const [userDescription, setDescription] = React.useState('Исследователь океана');
-  const [userAvatar, setAvatar] = React.useState('images/avatar.jpg');
+  const [userAvatar, setAvatar] = React.useState('');
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(()=> {
