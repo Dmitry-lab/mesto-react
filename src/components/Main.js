@@ -22,7 +22,7 @@ function Main(props) {
         alert('Ошибка подключения к серверу.')
       })
     }, []
-  )
+  );
 
   return (
     <main>
@@ -30,16 +30,16 @@ function Main(props) {
         <div className="profile__content">
           <div className="profile__avatar-block" onClick={props.onEditAvatarClick}>
             <img className="profile__avatar" src={userAvatar} alt="аватар пользователя" />
-            <div className="profile__shadow-rect"></div>
+            <div className="profile__shadow-rect" />
             <img className="profile__edit-icon" src={editAvatarIcon} alt="иконка редактирования аватара" />
           </div>
           <div className="profile__info">
             <h1 className="profile__name">{userName}</h1>
-            <button className="default-button profile__edit-button" type="button" onClick={props.onEditProfileClick}></button>
+            <button className="default-button profile__edit-button" type="button" onClick={props.onEditProfileClick} />
             <p className="profile__description">{userDescription}</p>
           </div>
         </div>
-        <button className="default-button profile__add-button" type="button" onClick={props.onAddPlaceLink}></button>
+        <button className="default-button profile__add-button" type="button" onClick={props.onAddPlaceLink} />
       </section>
       <section className="gallery">
         {cards.map(cardInfo => <Card key={cardInfo._id} card={cardInfo} onCardClick={props.onCardClick}/>)}
