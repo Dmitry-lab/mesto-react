@@ -1,48 +1,36 @@
 import React from 'react';
-import projectApi from '../utils/api';
 import editAvatarIcon from '../images/edit-icon.svg';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Main(props) {
-  const [userName, setUserName] = React.useState('Жак-Ив Кусто');
-  const [userDescription, setDescription] = React.useState('Исследователь океана');
-  const [userAvatar, setAvatar] = React.useState('');
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(()=> {
-    Promise.all([projectApi.getUserInfo(), projectApi.getInitialCards()])
-      .then(([userInfo, cardsArr]) => {
-        setUserName(userInfo.name);
-        setDescription(userInfo.about);
-        setAvatar(userInfo.avatar);
-        setCards(cardsArr)
-      })
-      .catch(err => {
-        console.log(`Ошибка ${err}`);
-        alert('Ошибка подключения к серверу.')
-      })
-    }, []
-  );
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main>
       <section className="profile">
         <div className="profile__content">
           <div className="profile__avatar-block" onClick={props.onEditAvatarClick}>
-            <img className="profile__avatar" src={userAvatar} alt="аватар пользователя" />
+            <img className="profile__avatar" src={currentUser.avatar} alt="аватар пользователя" />
             <div className="profile__shadow-rect" />
             <img className="profile__edit-icon" src={editAvatarIcon} alt="иконка редактирования аватара" />
           </div>
           <div className="profile__info">
-            <h1 className="profile__name">{userName}</h1>
+            <h1 className="profile__name">{currentUser.name}</h1>
             <button className="default-button profile__edit-button" type="button" onClick={props.onEditProfileClick} />
-            <p className="profile__description">{userDescription}</p>
+            <p className="profile__description">{currentUser.about}</p>
           </div>
         </div>
         <button className="default-button profile__add-button" type="button" onClick={props.onAddPlaceLink} />
       </section>
       <section className="gallery">
-        {cards.map(cardInfo => <Card key={cardInfo._id} card={cardInfo} onCardClick={props.onCardClick}/>)}
+        {props.cards.map(cardInfo => <Card
+          key={cardInfo._id}
+          card={cardInfo}
+          onCardClick={props.onCardClick}
+          onDeleteCardClick={props.onDeleteCardClick}
+          onCardLike={props.onCardLike}
+        />)}
       </section>
     </main>
   )
