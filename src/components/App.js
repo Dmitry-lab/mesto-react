@@ -3,10 +3,12 @@ import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
 import PopupWithForm from './PopupWithForm';
+import EditProfilePopup from './EditProfilePopup';
 import AgreementPopup from './AgreementPopup';
 import ImagePopup from './ImagePopup';
 import projectApi from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
   const [isEditProfilePopupOpen, setProfilePopupOpened] = React.useState(false);
@@ -65,13 +67,13 @@ function App() {
   }
 
   //Функция замены карточек в массиве на новую
-  function replaceCard(newCard) {
+  const replaceCard = (newCard) => {
     const newCards = cards.map(card => card._id === newCard._id ? newCard : card);
     setCards(newCards);
   }
 
   //Обработчик нажатия кнопки "like"
-  function handleCardLike(card) {
+  const handleCardLike = (card) => {
     if (card.likes.some(x => x._id === currentUser._id))
       projectApi.deleteLike(card._id)
         .then(newCard => replaceCard(newCard))
@@ -89,7 +91,7 @@ function App() {
   }
 
   //Обработчик подтверждения удаления карточки
-  function handleSubmitCardDelete(card) {
+  const handleSubmitCardDelete = (card) => {
     projectApi.deleteCard(card._id)
       .then(() => {
         const newCards = cards.filter(x => x._id !== card._id);
@@ -98,6 +100,32 @@ function App() {
       })
       .catch(err => {
         setAgreementPopupOpened(false)
+        console.log(`Ошибка ${err}`);
+        alert('Ошибка сервера. Попробуйте повторить действие позже.');
+      })
+  }
+
+  //Обработчик подтверждения изменения информации пользователя
+  const handleUpdateUser = (name, about) => {
+    projectApi.changeUserInfo(name, about)
+      .then(newInfo => {
+        setCurrentUser(newInfo);
+        setProfilePopupOpened(false);
+      })
+      .catch(err => {
+        console.log(`Ошибка ${err}`);
+        alert('Ошибка сервера. Попробуйте повторить действие позже.');
+      })
+  }
+
+  //Обработчик изменения аватара
+  const handleAvatarUpdate = (newUrl) => {
+    projectApi.changeAvatar(newUrl)
+      .then(newInfo => {
+        setCurrentUser(newInfo);
+        setAvatarPopupOpened(false);
+      })
+      .catch(err => {
         console.log(`Ошибка ${err}`);
         alert('Ошибка сервера. Попробуйте повторить действие позже.');
       })
@@ -118,29 +146,7 @@ function App() {
         />
         <Footer />
 
-        <PopupWithForm name="profile" title="Редактировать профиль" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} submitButtonText="Сохранить">
-          <input
-            className="popup__item popup__item_type_name"
-            id="input-name"
-            type="text"
-            name="profile-name"
-            placeholder="Имя"
-            minLength="2" maxLength="40"
-            pattern="[A-Za-zА-Яа-яЁё\s\-]*"
-            required
-          />
-          <span className="popup__error" id="input-name-error" />
-          <input
-            className="popup__item popup__item_type_description"
-            id="input-description"
-            type="text"
-            name="profile-description"
-            placeholder="О себе"
-            minLength="2" maxLength="200"
-            required
-          />
-          <span className="popup__error" id="input-description-error" />
-        </PopupWithForm>
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUserUpdate={handleUpdateUser}/>
 
         <PopupWithForm name="add-image" title="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} submitButtonText="Создать">
           <input
@@ -174,17 +180,7 @@ function App() {
           onSubmit={handleSubmitCardDelete}
         />
 
-        <PopupWithForm name="avatar-change" title="Обновить аватар" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} submitButtonText="Сохранить">
-          <input
-            className="popup__item popup__item_type_name"
-            id="input-url"
-            type="url"
-            name="user-avatar"
-            placeholder="Ссылка на аватар"
-            required
-          />
-          <span className="popup__error" id="input-url-error" />
-        </PopupWithForm>
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onAvatarUpdate={handleAvatarUpdate}/>
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
       </div>
