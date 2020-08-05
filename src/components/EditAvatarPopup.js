@@ -8,7 +8,6 @@ function EditAvatarPopup(props) {
    const handleSubmit = (e) => {
     e.preventDefault();
     props.onAvatarUpdate(inputValue.current.value);
-    inputValue.current.value = '';
   }
 
   const handleChange = (e) => {
@@ -18,6 +17,11 @@ function EditAvatarPopup(props) {
     else
       setUrlError('')
   }
+
+  React.useEffect(() => {
+    setUrlError('Заполните это поле');
+    inputValue.current.value = '';
+  }, [props.isOpen])
 
   return (
     <PopupWithForm

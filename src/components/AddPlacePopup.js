@@ -16,20 +16,31 @@ function AddPlacePopup(props) {
     setPlaceName(e.target.value);
     if (!e.target.validity.valid)
       setNameError(e.target.validationMessage)
+    else
+      setNameError('')
   }
 
   const handleChangeUrl = (e) => {
     setPlaceUrl(e.target.value)
     if (!e.target.validity.valid)
       setUrlError(e.target.validationMessage)
+    else
+      setUrlError('')
   }
+
+  React.useEffect(() => {
+    setNameError('Заполните это поле');
+    setUrlError('Заполните это поле');
+    setPlaceName('');
+    setPlaceUrl('');
+  }, [props.isOpen])
 
   return (
     <PopupWithForm
       name="add-image"
       title="Новое место"
-      isOpen={props.isAddPlacePopupOpen}
-      onClose={props.closeAllPopups}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
       submitButtonText="Создать"
       submitAvailable={nameError || urlError ? false : true}
       onSubmit={handleSubmit}
@@ -40,12 +51,12 @@ function AddPlacePopup(props) {
         type="text"
         name="place-name"
         placeholder="Название"
-        minLength="1" maxLength="30"
+        minLength="2" maxLength="30"
         onChange={handleChangeName}
         value={placeName || ''}
         required
       />
-      <span className="popup__error" id="input-place-name-error" />
+      <span className={`popup__error ${nameError ? 'popup__error_visible' : ''}`} id="input-place-name-error">{nameError}</span>
       <input
         className="popup__item popup__item_type_description"
         id="input-url"
@@ -56,7 +67,7 @@ function AddPlacePopup(props) {
         value={placeUrl || ''}
         required
       />
-      <span className="popup__error" id="input-url-error" />
+      <span className={`popup__error ${urlError ? 'popup__error_visible' : ''}`} id="input-place-name-error">{urlError}</span>
     </PopupWithForm>
   )
 }
