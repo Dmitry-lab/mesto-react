@@ -2,13 +2,13 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
-import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import AgreementPopup from './AgreementPopup';
 import ImagePopup from './ImagePopup';
 import projectApi from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   const [isEditProfilePopupOpen, setProfilePopupOpened] = React.useState(false);
@@ -131,6 +131,19 @@ function App() {
       })
   }
 
+  //Обработчик добавления карточки
+  const handleAddPlaceSubmit = (name, link) => {
+    projectApi.addCard(name, link)
+      .then(card => {
+        setCards([card, ...cards]);
+        setPlacePopupOpened(false);
+      })
+      .catch(err => {
+        console.log(`Ошибка ${err}`);
+        alert('Ошибка сервера. Попробуйте повторить действие позже.');
+      })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -147,28 +160,7 @@ function App() {
         <Footer />
 
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUserUpdate={handleUpdateUser}/>
-
-        <PopupWithForm name="add-image" title="Новое место" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} submitButtonText="Создать">
-          <input
-            className="popup__item popup__item_type_name"
-            id="input-place-name"
-            type="text"
-            name="place-name"
-            placeholder="Название"
-            minLength="1" maxLength="30"
-            required
-          />
-          <span className="popup__error" id="input-place-name-error" />
-          <input
-            className="popup__item popup__item_type_description"
-            id="input-url"
-            type="url"
-            name="place-link"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span className="popup__error" id="input-url-error" />
-        </PopupWithForm>
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlaceSubmit={handleAddPlaceSubmit}/>
 
         <AgreementPopup
           name="agreement"
@@ -181,7 +173,6 @@ function App() {
         />
 
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onAvatarUpdate={handleAvatarUpdate}/>
-
         <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
       </div>
     </CurrentUserContext.Provider>

@@ -33,10 +33,19 @@ function EditProfilePopup(props) {
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser])
+    setNameError('');
+    setDescriptionError('');
+  }, [currentUser, props.isOpen])
 
   return (
-    <PopupWithForm name="profile" title="Редактировать профиль" submitButtonText="Сохранить" onSubmit={handleSubmit} {...props}>
+    <PopupWithForm
+      name="profile"
+      title="Редактировать профиль"
+      submitButtonText="Сохранить"
+      onSubmit={handleSubmit}
+      submitAvailable={nameError || descriptionError ? false : true}
+      {...props}
+    >
       <input
         className="popup__item popup__item_type_name"
         id="input-name"
