@@ -7,10 +7,10 @@
 ## Используемые технологии
 * HTML
 * CSS, Flexbox, Grid Layout
-* Figma
 * Java Script
 * React
 * БЭМ методология
+* Figma
 
 ### Установка
 
